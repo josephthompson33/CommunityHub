@@ -1,0 +1,160 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Search Services</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+
+<body>
+<div class="navbar">
+	<a style="margin-top: 0px;"><span style="font-size:30px;margin-top: 0px;cursor:pointer" onclick="openNav()">&#9776;</span></a>
+
+	<a href="index.html">Home</a>
+  	<a href="about.html">About</a>
+  	<a href="search.html">Search Services</a>
+  	<a href="createCenter.html">New</a>
+  	<a style="float: right;">Community Hub </a>
+</div>
+
+	<div id="mySidenav" class="sidenav">
+  		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  		<a href="login.html">Agency Login</a>
+ 	 	<a href="http://www.reddit.com">Search Services</a>
+ 		<a href="http://www.youtube.com">Contact Us</a>
+  		<a href="http://www.craigslist.com">Careers</a>
+	</div>
+
+
+<div id="search" class="search">
+  <h2 style="text-align= center;">Select desired services</h2>
+  <input id="s1" type="checkbox" name="services" value="needle exchange"> Needle Exchange<br>
+  <input id="s2" type="checkbox" name="service2" value="Adult Outpatient"> Adult Outpatient<br>
+  <input id="s3" type="checkbox" name="service3" value="Methadone Treatment"> Methadone Treatment<br>
+  <button onclick="search()" style="background-color: white; color: black; border-radius: 5px; bottom: 0px; margin-left: 37%; " >Search</button>
+</div>
+
+<div id="uselessdiv"></div>
+
+<script>
+
+function search(){
+  if(document.getElementById("s1").checked){
+    var url = "http://localhost:8080/home?services=needle+exchange"
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", url, false);
+    xmlHttp.send( null );
+    var finalString = "";
+    var services = JSON.parse(xmlHttp.responseText);
+    for (var i = 0; i < services.length; i ++){
+      var service = services[i];
+      var s = service["services"];
+      var srvices = s.toString();
+      srvices = srvices.replace("[" , ' ');
+      srvices = srvices.replace("]" , ' ');
+      srvices = srvices.replace(/"/g, ' ');
+      finalString = finalString + "<div class='services'>";
+      finalString = finalString + "<h1> " + service["name"] + "</h1><br>";
+      finalString = finalString + "<h3>Location: </h3> <a>" + service["location"] + "</a><br>";
+      finalString = finalString + "<h3>Distance: " + service["distinmeters"] + "</h3><br>";
+      finalString = finalString + "<h3>Services Available: </h3> <a>" + srvices + "</a><br>";
+      finalString = finalString + "<h3>Overnight Rehab Slots: </h3> <a>" + service["beds"] + "</a><br>"
+      finalString = finalString + "<a href='" + service["website"] + "'> website </a>"
+      finalString = finalString + "<form action='https://www.google.com/maps/place/" + service["location"] + "'><button style='border: 1px solid white'>Get Directions</button></form><br>";
+      finalString = finalString + "</div>"
+
+      finalString = finalString + "<br>"
+    }
+    document.getElementById("uselessdiv").innerHTML = finalString;
+  }
+  else if(document.getElementById("s2").checked){
+    var url = "http://localhost:8080/home?services=Adult+Outpatient"
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", url, false);
+    xmlHttp.send( null );
+    var finalString = "";
+    var services = JSON.parse(xmlHttp.responseText);
+    for (var i = 0; i < services.length; i ++){
+      var service = services[i];
+      var s = service["services"];
+      var srvices = s.toString();
+      srvices = srvices.replace("[" , ' ');
+      srvices = srvices.replace("]" , ' ');
+      srvices = srvices.replace(/"/g, ' ');
+      finalString = finalString + "<div class='services'>";
+      finalString = finalString + "<h1> " + service["name"] + "</h1><br>";
+      finalString = finalString + "<h3>Location: </h3> <a>" + service["location"] + "</a><br>";
+      finalString = finalString + "<h3>Distance: " + service["distinmeters"] + "</h3><br>";
+      finalString = finalString + "<h3>Services Available: </h3> <a>" + srvices + "</a><br>";
+      finalString = finalString + "<h3>Overnight Rehab Slots: </h3> <a>" + service["beds"] + "</a><br>"
+      finalString = finalString + "<a href='" + service["website"] + "'> website </a>"
+      finalString = finalString + "<form action='https://www.google.com/maps/place/" + service["location"] + "'><button style='border: 1px solid white'>Get Directions</button></form><br>";
+      finalString = finalString + "</div>"
+
+      finalString = finalString + "<br>"
+    }
+    document.getElementById("uselessdiv").innerHTML = finalString;
+  }
+  else if(document.getElementById("s3").checked){
+    var url = "http://localhost:8080/home?services=Methadone+Treatment"
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", url, false);
+    xmlHttp.send( null );
+    var finalString = "";
+    var services = JSON.parse(xmlHttp.responseText);
+    for (var i = 0; i < services.length; i ++){
+      var service = services[i];
+      var s = service["services"];
+      var srvices = s.toString();
+      srvices = srvices.replace("[" , ' ');
+      srvices = srvices.replace("]" , ' ');
+      srvices = srvices.replace(/"/g, ' ');
+      finalString = finalString + "<div class='services'>";
+      finalString = finalString + "<h1> " + service["name"] + "</h1><br>";
+      finalString = finalString + "<h3>Location: </h3> <a>" + service["location"] + "</a><br>";
+      finalString = finalString + "<h3>Distance: " + service["distinmeters"] + "</h3><br>";
+      finalString = finalString + "<h3>Services Available: </h3> <a>" + srvices + "</a><br>";
+      finalString = finalString + "<h3>Overnight Rehab Slots: </h3> <a>" + service["beds"] + "</a><br>"
+      finalString = finalString + "<a href='" + service["website"] + "'> website </a>"
+      finalString = finalString + "<form action='https://www.google.com/maps/place/" + service["location"] + "'><button style='border: 1px solid white'>Get Directions</button></form><br>";
+      finalString = finalString + "</div>"
+
+      finalString = finalString + "<br>"
+    }
+    document.getElementById("uselessdiv").innerHTML = finalString;
+  }
+  else{
+    document.getElementById("uselessdiv").innerHTML = "NO RESULTS FOUND"
+  }
+}
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+
+function httpGet(){
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", "http://localhost:8080/home", false ); // false for synchronous   
+    xmlHttp.send( null );
+    var finalString = "";
+var services = JSON.parse(xmlHttp.responseText);
+window.alert(services[1]);
+    for (var i = 0; i < services.length; i ++){
+			var service = services[i];
+			finalString = finalString + "<table class='service'><tr>"
+			finalString = finalString + "<tr> <th>Name</th><td>" + service["name"] + "</td></tr>";
+			finalString = finalString + "<tr> <th>Location</th><td>" + service["location"] + "</td></tr>";
+			finalString = finalString + "<tr> <th>Services Available</th><td>" + service["services"] + "</td></tr>";
+			finalString = finalString + "</table>";
+		    }
+    document.getElementById("uselessdiv").innerHTML = finalString;
+    window.alert(finalString);
+    return xmlHttp.responseText;
+}
+</script>
+
+</body>
+</html>

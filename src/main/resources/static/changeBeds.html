@@ -1,0 +1,64 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Help Services</title>
+<link rel="stylesheet" type="text/css" media="all" href="css/style.css" th:href="@{css/style.css}"/>
+</head>
+
+<body>
+<div class="navbar">
+	<a style="margin-top: 0px;"><span style="font-size:30px; margin-top: 0px; cursor:pointer" onclick="openNav()">&#9776;</span></a>
+
+	<a href="index.html">Home</a>
+  	<a href="about.html">About</a>
+  	<a href="search.html">Search Services</a>
+  	<a href="createCenter.html">New</a>
+  	<a style="float: right;">Community Hub </a>
+</div>
+
+	<div id="mySidenav" class="sidenav">
+  		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  		<a href="login.html">Agency Login</a>
+ 	 	<a href="http://www.reddit.com">Search Services</a>
+ 		<a href="delete.html">Delete Agency</a>
+  		<a href="http://www.craigslist.com">Careers</a>
+	</div>
+
+
+<div id="uselessdiv" class="useless"></div>
+
+<footer>©2018 Thompson enterprises inc.</footer>
+
+<script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+
+function httpGet(){
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", "http://localhost:8080/home", false ); // false for synchronous   
+    xmlHttp.send( null );
+    var finalString = "";
+    var services = JSON.parse(xmlHttp.responseText);
+    window.alert(services);
+    for (var i = 0; i < services.length; i ++){
+			var service = services[i];
+			finalString = finalString + "<table class='service'><tr>"
+			finalString = finalString + "<tr> <th>Name</th><td>" + service["name"] + "</td></tr>";
+			finalString = finalString + "<tr> <th>Location</th><td>" + service["location"] + "</td></tr>";
+			finalString = finalString + "<tr> <th>Services Available</th><td>" + service["services"] + "</td></tr>";
+			finalString = finalString + "</table>";
+      finalString = finalString + "<br><br><br>"
+		    }
+    document.getElementById("uselessdiv").innerHTML = finalString;
+    return xmlHttp.responseText;
+}
+</script>
+
+</body>
+</html>

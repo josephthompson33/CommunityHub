@@ -1,0 +1,29 @@
+package controller;
+
+
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import DataAccess.*;
+
+@RestController
+public class barfController{
+
+    @RequestMapping("/barf")
+    public String barf() throws Exception{
+	/* This function simply returns all data in the database, in no particular order, 
+	 this was just to get myself used to the technologies I was using, making sure 
+	i know how things work. */
+	String returnValue = "";
+	DataAccess.establishConnection();
+	DataAccess.LoadData();
+        ArrayList<HashMap<String, Object>> agencies = DataAccess.mapWithStrings();
+	for(Map<String, Object> agency : agencies){
+	    returnValue = returnValue + agency.toString();
+	}
+	return returnValue;
+    }
+
+}

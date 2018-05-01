@@ -1,0 +1,76 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Delete Agencies</title>
+<link rel="stylesheet" type="text/css" media="all" href="css/style.css" th:href="@{css/style.css}"/>
+</head>
+
+<body onload="httpGet()">
+<div class="navbar">
+	<a style="margin-top: 0px;"><span style="font-size:30px;margin-top: 0px;cursor:pointer" onclick="openNav()">&#9776;</span></a>
+
+	<a href="index.html">Home</a>
+  	<a href="about.html">About</a>
+  	<a href="search.html">Search Services</a>
+  	<a href="createCenter.html">New</a>
+  	<a style="float: right;">Community Hub </a>
+</div>
+
+	<div id="mySidenav" class="sidenav">
+  		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  		<a href="http://wwww.google.com">Menu</a>
+ 	 	<a href="http://www.reddit.com">Search Services</a>
+ 		<a href="http://www.youtube.com">Contact Us</a>
+  		<a href="http://www.craigslist.com">Careers</a>
+	</div>
+
+
+<div id="uselessdiv" class="useless"></div>
+<button>click me</button>
+<footer>©2018 Thompson enterprises inc.</footer>
+
+<script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+
+function del(name){
+  var xmlHttp = new XMLHttpRequest();
+  var url = "http://localhost:8080/delete?name=" + name;
+  xmlHttp.open("GET", url, false);
+  location.reload();
+}
+
+function httpGet(){
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", "http://localhost:8080/home", false ); // false for synchronous   
+    xmlHttp.send( null );
+    var finalString = "";
+var services = JSON.parse(xmlHttp.responseText);
+window.alert(services[1]);
+    for (var i = 0; i < services.length; i ++){
+			var service = services[i];
+      finalString = finalString + "<div class='services'>";
+      finalString = finalString + "<h3> " + service["name"] + "</h3><br>";
+      finalString = finalString + "<h3>Location: </h3> <a>" + service["location"] + "</a><br>";
+      finalString = finalString + "<h3>Distance: " + service["distinmeters"] + "</h3><br>";
+      finalString = finalString + "<h3>Services Available: </h3> <a>" + service["services"] + "</a><br>";
+      finalString = finalString + " <form action='http://localhost:8080/del?name=" + service["name"] + "'><button> delete agency </button> </form>"
+      finalString = finalString + "<button href='https://www.google.com/maps/place/" + service["location"] + "'>Get Directions</button><br>";
+      finalString = finalString + "</div>"
+
+      finalString = finalString + "<br><br><br>"
+		    }
+    document.getElementById("uselessdiv").innerHTML = finalString;
+    window.alert(finalString);
+    return xmlHttp.responseText;
+}
+</script>
+
+</body>
+</html>

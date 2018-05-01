@@ -1,0 +1,45 @@
+package controller;
+
+/*
+*This is where requests to the server with the extension /newOrganization come
+*this should also not be a get request
+*Used to create a new agency and then put it in the database.
+*/
+
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import DataAccess.*;
+
+
+@RestController
+public class createOrganizationController{
+
+    @GetMapping("/newOrganization")
+    public String newOrganization(@RequestParam(required = true) String name,
+						   @RequestParam(required = true) String location,
+						   @RequestParam(required = true) String password,
+						   @RequestParam(required = true) String city,
+						   @RequestParam(required = true) String state, 
+						   @RequestParam(required = true) String zip,
+				                   @RequestParam(required = true) String services,
+				                   @RequestParam(required=false, defaultValue = "") String website)
+	throws Exception {
+		System.out.println(zip + state + location + name);
+		location = location + " "  + city + " " + state + " " + zip;
+	DataAccess.addItem("agencies", name, location, password, website, "0",  services);
+	return "true";
+	
+
+
+    }
+
+
+
+
+}

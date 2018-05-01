@@ -1,0 +1,128 @@
+package controller;
+
+/**
+* this is where the magic happens
+* This page is where requests to the server with the extension /home come.
+* get requests come to the method after @GetMapping
+* does not support post or put requests at this time
+**/
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.google.maps.DistanceMatrixApi;
+import com.google.maps.GeoApiContext;
+import com.google.maps.DistanceMatrixApiRequest;
+import com.google.maps.model.DistanceMatrix;
+import com.google.maps.model.Distance;
+import com.google.maps.*;
+import DataAccess.DataAccess;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Comparator;
+import java.util.Collections;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+@RestController
+public class homeController {
+
+    @GetMapping("/home")
+    public JSONArray home(@RequestParam(name="location", required=false, defaultValue="3800 Victory Pkwy, cincinnati, oh, 45207")String location,
+		       Model model,
+		       @RequestParam(name="services", required = false, defaultValue="") String services) throws Exception {
+	model.addAttribute("location", location);
+	System.out.println(location);
+	DataAccess.establishConnection();
+	ArrayList<HashMap<String, Object>> organizations = DataAccess.mapWithStrings();
+	int size = organizations.size();
+	String API_KEY = "AIzaSyCu-onDKmlppLPe-8OZIiuoGAO0alno5dg";
+	GeoApiContext context = new GeoApiContext().setApiKey(API_KEY);
+	String[] destinations = new String[organizations.size()];
+	int i = 0;
+	for(HashMap<String, Object> organization : organizations){
+	    destinations[i] = organization.get("location").toString();
+	    System.out.println(destinations[i]);
+	  i++;
+	}
+	Distance[] distances = new Distance[organizations.size()];
+	try{
+	      DistanceMatrixApiRequest req = new DistanceMatrixApiRequest(context);
+	      DistanceMatrix trix = req.origins(location)
+		  .destinations(destinations)
+		  .await();
+		   int m = 0;
+		   while(m< size){
+		       distances[m] = trix.rows[0].elements[m].distance;
+		       m++;
+		   }
+	  }
+	  catch (Exception e) {
+	      System.out.println(e.getMessage());
+	  }
+	System.out.println(distances.toString());
+	for(int k = 0; k < size; k++){
+	    organizations.get(k).put("distance", distances[k]);
+	    if(distances[k] != null){
+		organizations.get(k).put("distinmeters", distances[k].inMeters);
+		System.out.println(distances[k].inMeters);
+	    }
+	    else{
+		long longyboi = 10000000;
+		organizations.get(k).put("distinmeters", longyboi);
+	    }
+	}
+	Collections.sort(organizations, new Comparator<HashMap<String, Object>>(){
+		public int compare(HashMap<String, Object> d1,HashMap<String, Object> d2){
+		    if ((long)d1.get("distinmeters") > (long)d2.get("distinmeters"))
+			return 1;
+		    if((long)d1.get("distinmeters") < (long)d2.get("distinmeters"))
+			return -1;
+		    return 0;
+		}});
+	int y = 0;
+	for(int q = 0; q < size; q++){
+	    HashMap<String, Object> theOrganization = organizations.get(q);
+	    System.out.println(theOrganization.get("services").getClass());
+	    String s = theOrganization.get("services").toString();
+	    System.out.println(s);
+	    if(!(s.contains(services))){
+		organizations.remove(q);
+		q--;
+		size--;
+	    }
+
+
+	}
+	JSONArray jsonorgs = listmap_to_json_string(organizations);
+	model.addAttribute("organizations", organizations);
+	return jsonorgs;
+    }
+
+    public JSONArray listmap_to_json_string(ArrayList<HashMap<String, Object>> list)
+    {       
+	JSONArray json_arr=new JSONArray();
+	for (HashMap<String, Object> map : list) {
+	    JSONObject json_obj=new JSONObject();
+	    for (Map.Entry<String, Object> entry : map.entrySet()) {
+		String key = entry.getKey();
+		Object value = entry.getValue();
+		try {
+		    json_obj.put(key,value);
+		} catch (Exception e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}                           
+	    }
+	    json_arr.add(json_obj);
+	}
+	return json_arr;
+    }
+
+}

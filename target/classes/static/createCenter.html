@@ -1,0 +1,86 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Create Agency</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+</head>
+
+<body>
+<div class="navbar">
+	<a style="margin-top: 0px;"><span style="font-size:30px;margin-top: 0px;cursor:pointer" onclick="openNav()">&#9776;</span></a>
+
+	<a href="index.html">Home</a>
+  	<a href="about.html">About</a>
+  	<a href="search.html">Search Services</a>
+  	<a href="createCenter.html">New</a>
+  	<a style="float: right;">Community Hub </a>
+</div>
+
+	<div id="mySidenav" class="sidenav">
+  		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  		<a href="login.html">Agency Login</a>
+ 	 	<a href="search.html">Search Services</a>
+ 		<a href="http://www.youtube.com">Contact Us</a>
+  		<a href="http://www.craigslist.com">Careers</a>
+	</div>
+
+
+
+<div id="new" class="new"><form action="/newOrganization" method: "get">
+  <h2> New Agency </h2><br>
+  <h3> Name: </h3>
+  <input type="text" name="name"><br>
+  <h3> Address: </h3>
+  <input type="text" name="location"><br>
+  <h3>zip code:</h3>
+  <input type="text" name="zip"><br>
+  <h3>City: </h3>
+  <input type="text" name="city"><br>
+  <h3>State: </h3>
+  <select name="state">
+    <option value="OH">OH</option>
+  </select>
+  <h3>Password: </h3>
+  <input type="password" name="password"><br>
+  <h3>Services offered:</h3><br>
+  <input type="text" name="services"><br>
+  <h3>Website: </h3>
+  <input type="text" name="website"><br>
+
+
+  <input type="submit" value="Submit" style="border-radius: 5px; bottom: 0px; margin-left: 46%; ">
+</form></div>
+
+<script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+
+function httpGet(){
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", "http://localhost:8080/home", false ); // false for synchronous   
+    xmlHttp.send( null );
+    var finalString = "";
+var services = JSON.parse(xmlHttp.responseText);
+window.alert(services[1]);
+    for (var i = 0; i < services.length; i ++){
+			var service = services[i];
+			finalString = finalString + "<table class='service'><tr>"
+			finalString = finalString + "<tr> <th>Name</th><td>" + service["name"] + "</td></tr>";
+			finalString = finalString + "<tr> <th>Location</th><td>" + service["location"] + "</td></tr>";
+			finalString = finalString + "<tr> <th>Services Available</th><td>" + service["services"] + "</td></tr>";
+			finalString = finalString + "</table>";
+		    }
+    document.getElementById("uselessdiv").innerHTML = finalString;
+    window.alert(finalString);
+    return xmlHttp.responseText;
+}
+</script>
+
+</body>
+</html>
