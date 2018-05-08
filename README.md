@@ -13,15 +13,25 @@ requestable urls when the server is running:
 
   /home - with no parameters this returns the entirety of the help centers in the database, ordered by proximity, in the form of a json map.   
   optional parameters include:
+    
     location: in the form of 2 floats with at least 2 digits after the decimal, this will then order the help centers returned based on their proximity to the location given, this is ideally the users location.
+    
     services: this will filter results based on the services parameter given, json returned will only include the help centers with the given services. this also means that this url is used for the home page and search page.
+  
   /login - takes a username and password, returns a boolean for wether or not these were valid credentials
+  
   /newOrganization - takes name, address, website, services offered, and creates a new help center and puts it into the database
+  
   /del - takes the name of a help center to be deleted from the database
+  
   /changeBeds - takes the name of a help center and the number of slots for rehab programs they have, and sets the value
+  
   a request to the server running on the localhost, in javascript, looks like this:
+    
     var xmlHttp = new XMLHttpRequest();
+    
     xmlHttp.open( "GET", "http://localhost:8080/home", false ); // false for synchronous   
+    
     xmlHttp.send( null );
  
   
